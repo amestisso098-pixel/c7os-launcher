@@ -17,38 +17,27 @@
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
         .logo { font-size: 2.5rem; font-weight: bold; color: var(--accent); letter-spacing: 2px; }
 
-        /* --- GRID PRINCIPAL (HOME) --- */
-        .grid-home { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
-            gap: 25px; 
-        }
-
+        /* GRID PRINCIPAL */
+        .grid-home { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
         .app-main {
             aspect-ratio: 16 / 9; background: #111; border: 4px solid #333; border-radius: 15px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; outline: none; transition: 0.3s;
         }
         .app-main:focus { border-color: white; transform: scale(1.08); background: var(--accent); box-shadow: 0 0 20px rgba(229, 9, 20, 0.5); }
-        .app-main .icon { font-size: 3.5rem; object-fit: contain; margin-bottom: 10px; }
+        .app-main .icon { font-size: 3.5rem; margin-bottom: 10px; }
 
-        /* --- FREE STORY (OVERLAY ESTILO STREAMING) --- */
+        /* FREE STORY (ESTRUTURA MANTIDA) */
         .overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.98); z-index: 1000; flex-direction: column;
             animation: fadeIn 0.3s;
         }
-
         .top-bar { padding: 30px 50px; display: flex; align-items: center; gap: 30px; border-bottom: 1px solid #333; }
         .btn-back { background: var(--accent); border: none; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-
         .section-title { margin: 30px 50px 15px; font-size: 1.3rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* LISTA HORIZONTAL DE APKS/CONTEÚDO */
-        .store-row { 
-            display: flex; gap: 20px; padding: 10px 50px; overflow-x: auto; 
-            scrollbar-width: none; /* Esconde scroll no Firefox */
-        }
+        .store-row { display: flex; gap: 20px; padding: 10px 50px; overflow-x: auto; scrollbar-width: none; }
         .store-row::-webkit-scrollbar { display: none; }
 
         .card-apk {
@@ -58,17 +47,15 @@
             transition: 0.3s; cursor: pointer; outline: none;
         }
         .card-apk:focus { border-color: #00ff00; transform: scale(1.1); background: #222; z-index: 10; }
-        
         .card-apk .badge { position: absolute; top: 10px; right: 10px; font-size: 10px; background: #00ff00; color: black; padding: 2px 5px; border-radius: 3px; font-weight: bold; }
         .card-apk span { font-size: 2rem; margin-bottom: 5px; }
-        .card-apk .label { font-size: 0.9rem; font-weight: 500; }
-
+        
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="monitor">SISTEMA OK | RAM: <span id="ram">0MB</span></div>
+    <div class="monitor">SISTEMA ONLINE | RAM: <span id="ram">0MB</span></div>
 
     <div class="header">
         <div class="logo">C7OS</div>
@@ -93,7 +80,7 @@
             <h2 style="margin:0">CENTRAL DE APLICATIVOS</h2>
         </div>
 
-        <p class="section-title">Recomendados para Teste</p>
+        <p class="section-title">Teste de Sistema (Web)</p>
         <div class="store-row">
             <div class="card-apk" tabindex="10" onclick="abrir('https://www.netflix.com')">
                 <div class="badge">WEB</div>
@@ -101,22 +88,16 @@
             </div>
         </div>
 
-        <p class="section-title">Instalação Direta (APKs C7)</p>
+        <p class="section-title">Meus Aplicativos (APK)</p>
         <div class="store-row">
-            <div class="card-apk" tabindex="20" onclick="baixar('C7 Player', 'https://seu-link-github.apk')">
+            <div class="card-apk" tabindex="20" onclick="baixar('C7 Cine', 'https://github.com/amestisso098-pixel/c7os-launcher/releases/download/v1.0/Cinema.V1_Vip.-.v4.0.7_Tekmods.com.apk')">
                 <div class="badge">APK</div>
-                <span>📥</span><div class="label">Instalar C7 Player</div>
-            </div>
-            
-            <div class="card-apk" tabindex="21" onclick="baixar('C7 Cine', 'https://seu-link-github.apk')">
-                <div class="badge">APK</div>
-                <span>🎥</span><div class="label">C7 Cine</div>
+                <span>🎥</span><div class="label">Instalar C7 Cine</div>
             </div>
         </div>
     </div>
 
     <script>
-        // Relógio nativo
         function atualizarRelogio() {
             const agora = new Date();
             document.getElementById('clock').innerText = agora.getHours().toString().padStart(2,'0') + ":" + agora.getMinutes().toString().padStart(2,'0');
@@ -124,23 +105,20 @@
         setInterval(atualizarRelogio, 1000);
         atualizarRelogio();
 
-        // Foco inicial
         window.onload = () => document.querySelector('.app-main').focus();
 
-        // Ponte com Android
         function abrir(url) {
             if(window.AndroidBridge) window.AndroidBridge.openUrl(url);
             else window.location.href = url;
         }
 
         function baixar(nome, url) {
-            if(confirm("Deseja baixar e instalar " + nome + "?")) {
+            if(confirm("Deseja baixar e instalar o " + nome + "?")) {
                 if(window.AndroidBridge) window.AndroidBridge.downloadAPK(url);
-                else alert("Ponte Android não detectada para download.");
+                else window.location.href = url;
             }
         }
 
-        // Navegação Free Story
         function abrirFreeStory() {
             document.getElementById('free-story').style.display = 'flex';
             document.getElementById('back-btn').focus();
@@ -148,10 +126,9 @@
 
         function fecharFreeStory() {
             document.getElementById('free-story').style.display = 'none';
-            document.getElementById('main-nav').children[2].focus(); // Volta o foco para o botão Free Story
+            document.getElementById('main-nav').children[2].focus();
         }
 
-        // Recebe dados da MainActivity.java
         function updateStats(cpu, ram) {
             document.getElementById('ram').innerText = ram + "MB";
         }
